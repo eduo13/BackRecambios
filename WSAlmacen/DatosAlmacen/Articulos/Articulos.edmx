@@ -1,0 +1,573 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="ARCIPRESTE3Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="ARTICULOS">
+          <Key>
+            <PropertyRef Name="ID_ARTICULO" />
+          </Key>
+          <Property Name="ID_ARTICULO" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="NOMBRE" Type="varchar" MaxLength="100" />
+          <Property Name="DESCRIPCION" Type="varchar" MaxLength="1000" />
+          <Property Name="FABRICANTE" Type="varchar" MaxLength="1000" Nullable="false" />
+          <Property Name="PESO" Type="decimal" Precision="12" Scale="2" Nullable="false" />
+          <Property Name="ALTO" Type="decimal" Precision="12" Scale="2" />
+          <Property Name="LARGO" Type="decimal" Precision="12" Scale="2" />
+          <Property Name="ANCHO" Type="decimal" Precision="12" Scale="2" />
+          <Property Name="PRECIO" Type="decimal" Precision="12" Scale="2" Nullable="false" />
+          <Property Name="IMAGEN" Type="varbinary(max)" />
+        </EntityType>
+        <EntityType Name="PEDIDOS">
+          <Key>
+            <PropertyRef Name="ID_PEDIDO" />
+          </Key>
+          <Property Name="ID_PEDIDO" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CALLE" Type="varchar" MaxLength="1000" />
+          <Property Name="PROVINCIA" Type="varchar" MaxLength="1000" />
+          <Property Name="POBLACION" Type="varchar" MaxLength="100" />
+          <Property Name="CODIGO_POSTAL" Type="int" />
+          <Property Name="NUMERO" Type="varchar" MaxLength="1000" />
+          <Property Name="PERSONA_CONTACTO" Type="varchar" MaxLength="1000" />
+          <Property Name="TELEFONO" Type="varchar" MaxLength="1000" />
+          <Property Name="ESTADO" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="PEDIDOS_ARTICULOS">
+          <Key>
+            <PropertyRef Name="ID_PEDIDO" />
+            <PropertyRef Name="ID_ARTICULO" />
+          </Key>
+          <Property Name="ID_PEDIDO" Type="int" Nullable="false" />
+          <Property Name="ID_ARTICULO" Type="int" Nullable="false" />
+          <Property Name="CANTIDAD" Type="int" Nullable="false" />
+          <Property Name="ESTADO" Type="varchar" MaxLength="20" />
+        </EntityType>
+        <EntityType Name="STOCK">
+          <Key>
+            <PropertyRef Name="ID_ARTICULO" />
+          </Key>
+          <Property Name="ID_ARTICULO" Type="int" Nullable="false" />
+          <Property Name="CANTIDAD" Type="int" />
+        </EntityType>
+        <!--Errores durante la generación:
+advertencia 6002: La tabla o vista 'ARCIPRESTE3.dbo.V_ARTICULOS_STOCK' no tiene definida ninguna clave principal. Se ha inferido la clave y la definición se creado como una vista o tabla de solo lectura.-->
+        <EntityType Name="V_ARTICULOS_STOCK">
+          <Key>
+            <PropertyRef Name="FABRICANTE" />
+            <PropertyRef Name="PESO" />
+            <PropertyRef Name="PRECIO" />
+            <PropertyRef Name="ID_ARTICULO" />
+          </Key>
+          <Property Name="NOMBRE" Type="varchar" MaxLength="100" />
+          <Property Name="CANTIDAD" Type="int" />
+          <Property Name="DESCRIPCION" Type="varchar" MaxLength="1000" />
+          <Property Name="FABRICANTE" Type="varchar" MaxLength="1000" Nullable="false" />
+          <Property Name="PESO" Type="decimal" Precision="12" Scale="2" Nullable="false" />
+          <Property Name="ALTO" Type="decimal" Precision="12" Scale="2" />
+          <Property Name="LARGO" Type="decimal" Precision="12" Scale="2" />
+          <Property Name="ANCHO" Type="decimal" Precision="12" Scale="2" />
+          <Property Name="PRECIO" Type="decimal" Precision="12" Scale="2" Nullable="false" />
+          <Property Name="IMAGEN" Type="varbinary(max)" />
+          <Property Name="ID_ARTICULO" Type="int" Nullable="false" />
+        </EntityType>
+        <!--Errores durante la generación:
+advertencia 6002: La tabla o vista 'ARCIPRESTE3.dbo.V_PEDIDOS_ARTICULOS_STOCK' no tiene definida ninguna clave principal. Se ha inferido la clave y la definición se creado como una vista o tabla de solo lectura.-->
+        <EntityType Name="V_PEDIDOS_ARTICULOS_STOCK">
+          <Key>
+            <PropertyRef Name="ID_PEDIDO" />
+            <PropertyRef Name="ID_ARTICULO" />
+            <PropertyRef Name="CANTIDADPEDIDA" />
+          </Key>
+          <Property Name="ID_PEDIDO" Type="int" Nullable="false" />
+          <Property Name="ESTADO" Type="varchar" MaxLength="50" />
+          <Property Name="ID_ARTICULO" Type="int" Nullable="false" />
+          <Property Name="CANTIDADPEDIDA" Type="int" Nullable="false" />
+          <Property Name="CANTIDAD" Type="int" />
+        </EntityType>
+        <Association Name="FK_PEDIDOS_ARTICULOS_ARTICULOS">
+          <End Role="ARTICULOS" Type="Self.ARTICULOS" Multiplicity="1" />
+          <End Role="PEDIDOS_ARTICULOS" Type="Self.PEDIDOS_ARTICULOS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ARTICULOS">
+              <PropertyRef Name="ID_ARTICULO" />
+            </Principal>
+            <Dependent Role="PEDIDOS_ARTICULOS">
+              <PropertyRef Name="ID_ARTICULO" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PEDIDOS_ARTICULOS_PEDIDOS">
+          <End Role="PEDIDOS" Type="Self.PEDIDOS" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="PEDIDOS_ARTICULOS" Type="Self.PEDIDOS_ARTICULOS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PEDIDOS">
+              <PropertyRef Name="ID_PEDIDO" />
+            </Principal>
+            <Dependent Role="PEDIDOS_ARTICULOS">
+              <PropertyRef Name="ID_PEDIDO" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_STOCK_ARTICULOS">
+          <End Role="ARTICULOS" Type="Self.ARTICULOS" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="STOCK" Type="Self.STOCK" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="ARTICULOS">
+              <PropertyRef Name="ID_ARTICULO" />
+            </Principal>
+            <Dependent Role="STOCK">
+              <PropertyRef Name="ID_ARTICULO" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="PA_AÑADIR_ARTICULO" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="NOMBRE" Type="varchar" Mode="In" />
+          <Parameter Name="DESCRIPCION" Type="varchar" Mode="In" />
+          <Parameter Name="FABRICANTE" Type="varchar" Mode="In" />
+          <Parameter Name="PESO" Type="decimal" Mode="In" />
+          <Parameter Name="ALTO" Type="decimal" Mode="In" />
+          <Parameter Name="LARGO" Type="decimal" Mode="In" />
+          <Parameter Name="ANCHO" Type="decimal" Mode="In" />
+          <Parameter Name="PRECIO" Type="decimal" Mode="In" />
+          <Parameter Name="IMAGEN" Type="varbinary(max)" Mode="In" />
+          <Parameter Name="RETCODE" Type="int" Mode="InOut" />
+          <Parameter Name="MENSAJE" Type="varchar" Mode="InOut" />
+        </Function>
+        <Function Name="PA_AÑADIR_PEDIDO" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="CALLE" Type="varchar" Mode="In" />
+          <Parameter Name="PROVINCIA" Type="varchar" Mode="In" />
+          <Parameter Name="POBLACION" Type="varchar" Mode="In" />
+          <Parameter Name="CODIGO_POSTAL" Type="int" Mode="In" />
+          <Parameter Name="NUMERO" Type="varchar" Mode="In" />
+          <Parameter Name="PERSONA_CONTACTO" Type="varchar" Mode="In" />
+          <Parameter Name="TELEFONO" Type="varchar" Mode="In" />
+          <Parameter Name="ESTADO" Type="varchar" Mode="In" />
+          <Parameter Name="RETCODE" Type="int" Mode="InOut" />
+          <Parameter Name="MENSAJE" Type="varchar" Mode="InOut" />
+          <Parameter Name="ID_PEDIDOS" Type="int" Mode="InOut" />
+        </Function>
+        <Function Name="PA_AÑADIR_PEDIDOS_ARTICULOS" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ID_PEDIDO" Type="int" Mode="In" />
+          <Parameter Name="ID_ARTICULO" Type="int" Mode="In" />
+          <Parameter Name="CANTIDAD" Type="int" Mode="In" />
+          <Parameter Name="ESTADO" Type="varchar" Mode="In" />
+          <Parameter Name="RETCODE" Type="int" Mode="InOut" />
+          <Parameter Name="MENSAJE" Type="varchar" Mode="InOut" />
+        </Function>
+        <Function Name="PA_AÑADIR_STOCK" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ID_ARTICULO" Type="int" Mode="In" />
+          <Parameter Name="CANTIDAD" Type="int" Mode="In" />
+          <Parameter Name="RETCODE" Type="int" Mode="InOut" />
+          <Parameter Name="MENSAJE" Type="varchar" Mode="InOut" />
+        </Function>
+        <Function Name="PA_BORRAR_ARTICULO" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ID_ARTICULO" Type="int" Mode="In" />
+          <Parameter Name="RETCODE" Type="int" Mode="InOut" />
+          <Parameter Name="MENSAJE" Type="varchar" Mode="InOut" />
+        </Function>
+        <Function Name="PA_CANCELAR_PEDIDO" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ID_PEDIDO" Type="int" Mode="In" />
+          <Parameter Name="RETCODE" Type="int" Mode="InOut" />
+          <Parameter Name="MENSAJE" Type="varchar" Mode="InOut" />
+        </Function>
+        <Function Name="PA_MODIFICAR_ARTICULO" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ID_ARTICULO" Type="int" Mode="In" />
+          <Parameter Name="NOMBRE" Type="varchar" Mode="In" />
+          <Parameter Name="DESCRIPCION" Type="varchar" Mode="In" />
+          <Parameter Name="FABRICANTE" Type="varchar" Mode="In" />
+          <Parameter Name="PESO" Type="decimal" Mode="In" />
+          <Parameter Name="ALTO" Type="decimal" Mode="In" />
+          <Parameter Name="LARGO" Type="decimal" Mode="In" />
+          <Parameter Name="ANCHO" Type="decimal" Mode="In" />
+          <Parameter Name="PRECIO" Type="decimal" Mode="In" />
+          <Parameter Name="IMAGEN" Type="varbinary(max)" Mode="In" />
+          <Parameter Name="RETCODE" Type="int" Mode="InOut" />
+          <Parameter Name="MENSAJE" Type="varchar" Mode="InOut" />
+        </Function>
+        <Function Name="PA_QUITAR_STOCK" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ID_ARTICULO" Type="int" Mode="In" />
+          <Parameter Name="CANTIDAD" Type="int" Mode="In" />
+          <Parameter Name="RETCODE" Type="int" Mode="InOut" />
+          <Parameter Name="MENSAJE" Type="varchar" Mode="InOut" />
+        </Function>
+        <EntityContainer Name="ARCIPRESTE3ModelStoreContainer">
+          <EntitySet Name="ARTICULOS" EntityType="Self.ARTICULOS" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PEDIDOS" EntityType="Self.PEDIDOS" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PEDIDOS_ARTICULOS" EntityType="Self.PEDIDOS_ARTICULOS" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="STOCK" EntityType="Self.STOCK" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="V_ARTICULOS_STOCK" EntityType="Self.V_ARTICULOS_STOCK" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [V_ARTICULOS_STOCK].[NOMBRE] AS [NOMBRE], 
+    [V_ARTICULOS_STOCK].[CANTIDAD] AS [CANTIDAD], 
+    [V_ARTICULOS_STOCK].[DESCRIPCION] AS [DESCRIPCION], 
+    [V_ARTICULOS_STOCK].[FABRICANTE] AS [FABRICANTE], 
+    [V_ARTICULOS_STOCK].[PESO] AS [PESO], 
+    [V_ARTICULOS_STOCK].[ALTO] AS [ALTO], 
+    [V_ARTICULOS_STOCK].[LARGO] AS [LARGO], 
+    [V_ARTICULOS_STOCK].[ANCHO] AS [ANCHO], 
+    [V_ARTICULOS_STOCK].[PRECIO] AS [PRECIO], 
+    [V_ARTICULOS_STOCK].[IMAGEN] AS [IMAGEN], 
+    [V_ARTICULOS_STOCK].[ID_ARTICULO] AS [ID_ARTICULO]
+    FROM [dbo].[V_ARTICULOS_STOCK] AS [V_ARTICULOS_STOCK]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="V_PEDIDOS_ARTICULOS_STOCK" EntityType="Self.V_PEDIDOS_ARTICULOS_STOCK" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [V_PEDIDOS_ARTICULOS_STOCK].[ID_PEDIDO] AS [ID_PEDIDO], 
+    [V_PEDIDOS_ARTICULOS_STOCK].[ESTADO] AS [ESTADO], 
+    [V_PEDIDOS_ARTICULOS_STOCK].[ID_ARTICULO] AS [ID_ARTICULO], 
+    [V_PEDIDOS_ARTICULOS_STOCK].[CANTIDADPEDIDA] AS [CANTIDADPEDIDA], 
+    [V_PEDIDOS_ARTICULOS_STOCK].[CANTIDAD] AS [CANTIDAD]
+    FROM [dbo].[V_PEDIDOS_ARTICULOS_STOCK] AS [V_PEDIDOS_ARTICULOS_STOCK]</DefiningQuery>
+          </EntitySet>
+          <AssociationSet Name="FK_PEDIDOS_ARTICULOS_ARTICULOS" Association="Self.FK_PEDIDOS_ARTICULOS_ARTICULOS">
+            <End Role="ARTICULOS" EntitySet="ARTICULOS" />
+            <End Role="PEDIDOS_ARTICULOS" EntitySet="PEDIDOS_ARTICULOS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PEDIDOS_ARTICULOS_PEDIDOS" Association="Self.FK_PEDIDOS_ARTICULOS_PEDIDOS">
+            <End Role="PEDIDOS" EntitySet="PEDIDOS" />
+            <End Role="PEDIDOS_ARTICULOS" EntitySet="PEDIDOS_ARTICULOS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_STOCK_ARTICULOS" Association="Self.FK_STOCK_ARTICULOS">
+            <End Role="ARTICULOS" EntitySet="ARTICULOS" />
+            <End Role="STOCK" EntitySet="STOCK" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="ARCIPRESTE3Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="ARTICULOS">
+          <Key>
+            <PropertyRef Name="ID_ARTICULO" />
+          </Key>
+          <Property Name="ID_ARTICULO" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="NOMBRE" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="DESCRIPCION" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" />
+          <Property Name="FABRICANTE" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="PESO" Type="Decimal" Precision="12" Scale="2" Nullable="false" />
+          <Property Name="ALTO" Type="Decimal" Precision="12" Scale="2" />
+          <Property Name="LARGO" Type="Decimal" Precision="12" Scale="2" />
+          <Property Name="ANCHO" Type="Decimal" Precision="12" Scale="2" />
+          <Property Name="PRECIO" Type="Decimal" Precision="12" Scale="2" Nullable="false" />
+          <Property Name="IMAGEN" Type="Binary" MaxLength="Max" FixedLength="false" />
+          <NavigationProperty Name="PEDIDOS_ARTICULOS" Relationship="Self.FK_PEDIDOS_ARTICULOS_ARTICULOS" FromRole="ARTICULOS" ToRole="PEDIDOS_ARTICULOS" />
+          <NavigationProperty Name="STOCK" Relationship="Self.FK_STOCK_ARTICULOS" FromRole="ARTICULOS" ToRole="STOCK" />
+        </EntityType>
+        <EntityType Name="PEDIDOS">
+          <Key>
+            <PropertyRef Name="ID_PEDIDO" />
+          </Key>
+          <Property Name="ID_PEDIDO" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CALLE" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" />
+          <Property Name="PROVINCIA" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" />
+          <Property Name="POBLACION" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="CODIGO_POSTAL" Type="Int32" />
+          <Property Name="NUMERO" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" />
+          <Property Name="PERSONA_CONTACTO" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" />
+          <Property Name="TELEFONO" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" />
+          <Property Name="ESTADO" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="PEDIDOS_ARTICULOS" Relationship="Self.FK_PEDIDOS_ARTICULOS_PEDIDOS" FromRole="PEDIDOS" ToRole="PEDIDOS_ARTICULOS" />
+        </EntityType>
+        <EntityType Name="PEDIDOS_ARTICULOS">
+          <Key>
+            <PropertyRef Name="ID_PEDIDO" />
+            <PropertyRef Name="ID_ARTICULO" />
+          </Key>
+          <Property Name="ID_PEDIDO" Type="Int32" Nullable="false" />
+          <Property Name="ID_ARTICULO" Type="Int32" Nullable="false" />
+          <Property Name="CANTIDAD" Type="Int32" Nullable="false" />
+          <Property Name="ESTADO" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="ARTICULOS" Relationship="Self.FK_PEDIDOS_ARTICULOS_ARTICULOS" FromRole="PEDIDOS_ARTICULOS" ToRole="ARTICULOS" />
+          <NavigationProperty Name="PEDIDOS" Relationship="Self.FK_PEDIDOS_ARTICULOS_PEDIDOS" FromRole="PEDIDOS_ARTICULOS" ToRole="PEDIDOS" />
+        </EntityType>
+        <EntityType Name="STOCK">
+          <Key>
+            <PropertyRef Name="ID_ARTICULO" />
+          </Key>
+          <Property Name="ID_ARTICULO" Type="Int32" Nullable="false" />
+          <Property Name="CANTIDAD" Type="Int32" />
+          <NavigationProperty Name="ARTICULOS" Relationship="Self.FK_STOCK_ARTICULOS" FromRole="STOCK" ToRole="ARTICULOS" />
+        </EntityType>
+        <EntityType Name="V_ARTICULOS_STOCK">
+          <Key>
+            <PropertyRef Name="FABRICANTE" />
+            <PropertyRef Name="PESO" />
+            <PropertyRef Name="PRECIO" />
+            <PropertyRef Name="ID_ARTICULO" />
+          </Key>
+          <Property Name="NOMBRE" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="CANTIDAD" Type="Int32" />
+          <Property Name="DESCRIPCION" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" />
+          <Property Name="FABRICANTE" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="PESO" Type="Decimal" Precision="12" Scale="2" Nullable="false" />
+          <Property Name="ALTO" Type="Decimal" Precision="12" Scale="2" />
+          <Property Name="LARGO" Type="Decimal" Precision="12" Scale="2" />
+          <Property Name="ANCHO" Type="Decimal" Precision="12" Scale="2" />
+          <Property Name="PRECIO" Type="Decimal" Precision="12" Scale="2" Nullable="false" />
+          <Property Name="IMAGEN" Type="Binary" MaxLength="Max" FixedLength="false" />
+          <Property Name="ID_ARTICULO" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="V_PEDIDOS_ARTICULOS_STOCK">
+          <Key>
+            <PropertyRef Name="ID_PEDIDO" />
+            <PropertyRef Name="ID_ARTICULO" />
+            <PropertyRef Name="CANTIDADPEDIDA" />
+          </Key>
+          <Property Name="ID_PEDIDO" Type="Int32" Nullable="false" />
+          <Property Name="ESTADO" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ID_ARTICULO" Type="Int32" Nullable="false" />
+          <Property Name="CANTIDADPEDIDA" Type="Int32" Nullable="false" />
+          <Property Name="CANTIDAD" Type="Int32" />
+        </EntityType>
+        <Association Name="FK_PEDIDOS_ARTICULOS_ARTICULOS">
+          <End Role="ARTICULOS" Type="Self.ARTICULOS" Multiplicity="1" />
+          <End Role="PEDIDOS_ARTICULOS" Type="Self.PEDIDOS_ARTICULOS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ARTICULOS">
+              <PropertyRef Name="ID_ARTICULO" />
+            </Principal>
+            <Dependent Role="PEDIDOS_ARTICULOS">
+              <PropertyRef Name="ID_ARTICULO" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_STOCK_ARTICULOS">
+          <End Role="ARTICULOS" Type="Self.ARTICULOS" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="STOCK" Type="Self.STOCK" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="ARTICULOS">
+              <PropertyRef Name="ID_ARTICULO" />
+            </Principal>
+            <Dependent Role="STOCK">
+              <PropertyRef Name="ID_ARTICULO" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PEDIDOS_ARTICULOS_PEDIDOS">
+          <End Role="PEDIDOS" Type="Self.PEDIDOS" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="PEDIDOS_ARTICULOS" Type="Self.PEDIDOS_ARTICULOS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PEDIDOS">
+              <PropertyRef Name="ID_PEDIDO" />
+            </Principal>
+            <Dependent Role="PEDIDOS_ARTICULOS">
+              <PropertyRef Name="ID_PEDIDO" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="ArticulosEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="ARTICULOS" EntityType="Self.ARTICULOS" />
+          <EntitySet Name="PEDIDOS" EntityType="Self.PEDIDOS" />
+          <EntitySet Name="PEDIDOS_ARTICULOS" EntityType="Self.PEDIDOS_ARTICULOS" />
+          <EntitySet Name="STOCK" EntityType="Self.STOCK" />
+          <EntitySet Name="V_ARTICULOS_STOCK" EntityType="Self.V_ARTICULOS_STOCK" />
+          <EntitySet Name="V_PEDIDOS_ARTICULOS_STOCK" EntityType="Self.V_PEDIDOS_ARTICULOS_STOCK" />
+          <AssociationSet Name="FK_PEDIDOS_ARTICULOS_ARTICULOS" Association="Self.FK_PEDIDOS_ARTICULOS_ARTICULOS">
+            <End Role="ARTICULOS" EntitySet="ARTICULOS" />
+            <End Role="PEDIDOS_ARTICULOS" EntitySet="PEDIDOS_ARTICULOS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_STOCK_ARTICULOS" Association="Self.FK_STOCK_ARTICULOS">
+            <End Role="ARTICULOS" EntitySet="ARTICULOS" />
+            <End Role="STOCK" EntitySet="STOCK" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PEDIDOS_ARTICULOS_PEDIDOS" Association="Self.FK_PEDIDOS_ARTICULOS_PEDIDOS">
+            <End Role="PEDIDOS" EntitySet="PEDIDOS" />
+            <End Role="PEDIDOS_ARTICULOS" EntitySet="PEDIDOS_ARTICULOS" />
+          </AssociationSet>
+          <FunctionImport Name="PA_AÑADIR_ARTICULO">
+            <Parameter Name="NOMBRE" Mode="In" Type="String" />
+            <Parameter Name="DESCRIPCION" Mode="In" Type="String" />
+            <Parameter Name="FABRICANTE" Mode="In" Type="String" />
+            <Parameter Name="PESO" Mode="In" Type="Decimal" />
+            <Parameter Name="ALTO" Mode="In" Type="Decimal" />
+            <Parameter Name="LARGO" Mode="In" Type="Decimal" />
+            <Parameter Name="ANCHO" Mode="In" Type="Decimal" />
+            <Parameter Name="PRECIO" Mode="In" Type="Decimal" />
+            <Parameter Name="IMAGEN" Mode="In" Type="Binary" />
+            <Parameter Name="RETCODE" Mode="InOut" Type="Int32" />
+            <Parameter Name="MENSAJE" Mode="InOut" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="PA_AÑADIR_PEDIDO">
+            <Parameter Name="CALLE" Mode="In" Type="String" />
+            <Parameter Name="PROVINCIA" Mode="In" Type="String" />
+            <Parameter Name="POBLACION" Mode="In" Type="String" />
+            <Parameter Name="CODIGO_POSTAL" Mode="In" Type="Int32" />
+            <Parameter Name="NUMERO" Mode="In" Type="String" />
+            <Parameter Name="PERSONA_CONTACTO" Mode="In" Type="String" />
+            <Parameter Name="TELEFONO" Mode="In" Type="String" />
+            <Parameter Name="ESTADO" Mode="In" Type="String" />
+            <Parameter Name="RETCODE" Mode="InOut" Type="Int32" />
+            <Parameter Name="MENSAJE" Mode="InOut" Type="String" />
+            <Parameter Name="ID_PEDIDOS" Mode="InOut" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="PA_AÑADIR_PEDIDOS_ARTICULOS">
+            <Parameter Name="ID_PEDIDO" Mode="In" Type="Int32" />
+            <Parameter Name="ID_ARTICULO" Mode="In" Type="Int32" />
+            <Parameter Name="CANTIDAD" Mode="In" Type="Int32" />
+            <Parameter Name="ESTADO" Mode="In" Type="String" />
+            <Parameter Name="RETCODE" Mode="InOut" Type="Int32" />
+            <Parameter Name="MENSAJE" Mode="InOut" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="PA_AÑADIR_STOCK">
+            <Parameter Name="ID_ARTICULO" Mode="In" Type="Int32" />
+            <Parameter Name="CANTIDAD" Mode="In" Type="Int32" />
+            <Parameter Name="RETCODE" Mode="InOut" Type="Int32" />
+            <Parameter Name="MENSAJE" Mode="InOut" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="PA_BORRAR_ARTICULO">
+            <Parameter Name="ID_ARTICULO" Mode="In" Type="Int32" />
+            <Parameter Name="RETCODE" Mode="InOut" Type="Int32" />
+            <Parameter Name="MENSAJE" Mode="InOut" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="PA_CANCELAR_PEDIDO">
+            <Parameter Name="ID_PEDIDO" Mode="In" Type="Int32" />
+            <Parameter Name="RETCODE" Mode="InOut" Type="Int32" />
+            <Parameter Name="MENSAJE" Mode="InOut" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="PA_MODIFICAR_ARTICULO">
+            <Parameter Name="ID_ARTICULO" Mode="In" Type="Int32" />
+            <Parameter Name="NOMBRE" Mode="In" Type="String" />
+            <Parameter Name="DESCRIPCION" Mode="In" Type="String" />
+            <Parameter Name="FABRICANTE" Mode="In" Type="String" />
+            <Parameter Name="PESO" Mode="In" Type="Decimal" />
+            <Parameter Name="ALTO" Mode="In" Type="Decimal" />
+            <Parameter Name="LARGO" Mode="In" Type="Decimal" />
+            <Parameter Name="ANCHO" Mode="In" Type="Decimal" />
+            <Parameter Name="PRECIO" Mode="In" Type="Decimal" />
+            <Parameter Name="IMAGEN" Mode="In" Type="Binary" />
+            <Parameter Name="RETCODE" Mode="InOut" Type="Int32" />
+            <Parameter Name="MENSAJE" Mode="InOut" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="PA_QUITAR_STOCK">
+            <Parameter Name="ID_ARTICULO" Mode="In" Type="Int32" />
+            <Parameter Name="CANTIDAD" Mode="In" Type="Int32" />
+            <Parameter Name="RETCODE" Mode="InOut" Type="Int32" />
+            <Parameter Name="MENSAJE" Mode="InOut" Type="String" />
+          </FunctionImport>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="ARCIPRESTE3ModelStoreContainer" CdmEntityContainer="ArticulosEntities">
+          <EntitySetMapping Name="ARTICULOS">
+            <EntityTypeMapping TypeName="ARCIPRESTE3Model.ARTICULOS">
+              <MappingFragment StoreEntitySet="ARTICULOS">
+                <ScalarProperty Name="ID_ARTICULO" ColumnName="ID_ARTICULO" />
+                <ScalarProperty Name="NOMBRE" ColumnName="NOMBRE" />
+                <ScalarProperty Name="DESCRIPCION" ColumnName="DESCRIPCION" />
+                <ScalarProperty Name="FABRICANTE" ColumnName="FABRICANTE" />
+                <ScalarProperty Name="PESO" ColumnName="PESO" />
+                <ScalarProperty Name="ALTO" ColumnName="ALTO" />
+                <ScalarProperty Name="LARGO" ColumnName="LARGO" />
+                <ScalarProperty Name="ANCHO" ColumnName="ANCHO" />
+                <ScalarProperty Name="PRECIO" ColumnName="PRECIO" />
+                <ScalarProperty Name="IMAGEN" ColumnName="IMAGEN" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PEDIDOS">
+            <EntityTypeMapping TypeName="ARCIPRESTE3Model.PEDIDOS">
+              <MappingFragment StoreEntitySet="PEDIDOS">
+                <ScalarProperty Name="ID_PEDIDO" ColumnName="ID_PEDIDO" />
+                <ScalarProperty Name="CALLE" ColumnName="CALLE" />
+                <ScalarProperty Name="PROVINCIA" ColumnName="PROVINCIA" />
+                <ScalarProperty Name="POBLACION" ColumnName="POBLACION" />
+                <ScalarProperty Name="CODIGO_POSTAL" ColumnName="CODIGO_POSTAL" />
+                <ScalarProperty Name="NUMERO" ColumnName="NUMERO" />
+                <ScalarProperty Name="PERSONA_CONTACTO" ColumnName="PERSONA_CONTACTO" />
+                <ScalarProperty Name="TELEFONO" ColumnName="TELEFONO" />
+                <ScalarProperty Name="ESTADO" ColumnName="ESTADO" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PEDIDOS_ARTICULOS">
+            <EntityTypeMapping TypeName="ARCIPRESTE3Model.PEDIDOS_ARTICULOS">
+              <MappingFragment StoreEntitySet="PEDIDOS_ARTICULOS">
+                <ScalarProperty Name="ID_PEDIDO" ColumnName="ID_PEDIDO" />
+                <ScalarProperty Name="ID_ARTICULO" ColumnName="ID_ARTICULO" />
+                <ScalarProperty Name="CANTIDAD" ColumnName="CANTIDAD" />
+                <ScalarProperty Name="ESTADO" ColumnName="ESTADO" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="STOCK">
+            <EntityTypeMapping TypeName="ARCIPRESTE3Model.STOCK">
+              <MappingFragment StoreEntitySet="STOCK">
+                <ScalarProperty Name="ID_ARTICULO" ColumnName="ID_ARTICULO" />
+                <ScalarProperty Name="CANTIDAD" ColumnName="CANTIDAD" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="V_ARTICULOS_STOCK">
+            <EntityTypeMapping TypeName="ARCIPRESTE3Model.V_ARTICULOS_STOCK">
+              <MappingFragment StoreEntitySet="V_ARTICULOS_STOCK">
+                <ScalarProperty Name="NOMBRE" ColumnName="NOMBRE" />
+                <ScalarProperty Name="CANTIDAD" ColumnName="CANTIDAD" />
+                <ScalarProperty Name="DESCRIPCION" ColumnName="DESCRIPCION" />
+                <ScalarProperty Name="FABRICANTE" ColumnName="FABRICANTE" />
+                <ScalarProperty Name="PESO" ColumnName="PESO" />
+                <ScalarProperty Name="ALTO" ColumnName="ALTO" />
+                <ScalarProperty Name="LARGO" ColumnName="LARGO" />
+                <ScalarProperty Name="ANCHO" ColumnName="ANCHO" />
+                <ScalarProperty Name="PRECIO" ColumnName="PRECIO" />
+                <ScalarProperty Name="IMAGEN" ColumnName="IMAGEN" />
+                <ScalarProperty Name="ID_ARTICULO" ColumnName="ID_ARTICULO" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="V_PEDIDOS_ARTICULOS_STOCK">
+            <EntityTypeMapping TypeName="ARCIPRESTE3Model.V_PEDIDOS_ARTICULOS_STOCK">
+              <MappingFragment StoreEntitySet="V_PEDIDOS_ARTICULOS_STOCK">
+                <ScalarProperty Name="ID_PEDIDO" ColumnName="ID_PEDIDO" />
+                <ScalarProperty Name="ESTADO" ColumnName="ESTADO" />
+                <ScalarProperty Name="ID_ARTICULO" ColumnName="ID_ARTICULO" />
+                <ScalarProperty Name="CANTIDADPEDIDA" ColumnName="CANTIDADPEDIDA" />
+                <ScalarProperty Name="CANTIDAD" ColumnName="CANTIDAD" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="PA_AÑADIR_ARTICULO" FunctionName="ARCIPRESTE3Model.Store.PA_AÑADIR_ARTICULO" />
+          <FunctionImportMapping FunctionImportName="PA_AÑADIR_PEDIDO" FunctionName="ARCIPRESTE3Model.Store.PA_AÑADIR_PEDIDO" />
+          <FunctionImportMapping FunctionImportName="PA_AÑADIR_PEDIDOS_ARTICULOS" FunctionName="ARCIPRESTE3Model.Store.PA_AÑADIR_PEDIDOS_ARTICULOS" />
+          <FunctionImportMapping FunctionImportName="PA_AÑADIR_STOCK" FunctionName="ARCIPRESTE3Model.Store.PA_AÑADIR_STOCK" />
+          <FunctionImportMapping FunctionImportName="PA_BORRAR_ARTICULO" FunctionName="ARCIPRESTE3Model.Store.PA_BORRAR_ARTICULO" />
+          <FunctionImportMapping FunctionImportName="PA_CANCELAR_PEDIDO" FunctionName="ARCIPRESTE3Model.Store.PA_CANCELAR_PEDIDO" />
+          <FunctionImportMapping FunctionImportName="PA_MODIFICAR_ARTICULO" FunctionName="ARCIPRESTE3Model.Store.PA_MODIFICAR_ARTICULO" />
+          <FunctionImportMapping FunctionImportName="PA_QUITAR_STOCK" FunctionName="ARCIPRESTE3Model.Store.PA_QUITAR_STOCK" />
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Ninguno" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

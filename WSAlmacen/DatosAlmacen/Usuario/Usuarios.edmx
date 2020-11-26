@@ -1,0 +1,183 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="ARCIPRESTE3Model1.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="USUARIOS">
+          <Key>
+            <PropertyRef Name="ID_USUARIOS" />
+          </Key>
+          <Property Name="ID_USUARIOS" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="USUARIO" Type="varchar" MaxLength="1000" />
+          <Property Name="PASSWORD" Type="varbinary(max)" />
+          <Property Name="PERFIL" Type="int" />
+          <Property Name="EMAIL" Type="varchar" MaxLength="70" />
+        </EntityType>
+        <!--Errores durante la generación:
+advertencia 6002: La tabla o vista 'ARCIPRESTE3.dbo.V_USUARIOS_PERFILES' no tiene definida ninguna clave principal. Se ha inferido la clave y la definición se creado como una vista o tabla de solo lectura.-->
+        <EntityType Name="V_USUARIOS_PERFILES">
+          <Key>
+            <PropertyRef Name="ID_USUARIOS" />
+          </Key>
+          <Property Name="ID_USUARIOS" Type="int" Nullable="false" />
+          <Property Name="USUARIO" Type="varchar" MaxLength="1000" />
+          <Property Name="ID_PERFIL" Type="int" />
+          <Property Name="PERFIL" Type="varchar" MaxLength="1000" />
+          <Property Name="EMAIL" Type="varchar" MaxLength="70" />
+        </EntityType>
+        <Function Name="PA_BORRAR_USUARIO" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ID_USUARIO" Type="int" Mode="In" />
+          <Parameter Name="RETCODE" Type="int" Mode="InOut" />
+          <Parameter Name="MENSAJE" Type="varchar" Mode="InOut" />
+        </Function>
+        <Function Name="PA_CREAR_USUARIO" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="USUARIO" Type="varchar" Mode="In" />
+          <Parameter Name="PASSWORD" Type="varchar" Mode="In" />
+          <Parameter Name="PERFIL" Type="int" Mode="In" />
+          <Parameter Name="EMAIL" Type="varchar" Mode="In" />
+          <Parameter Name="RETCODE" Type="int" Mode="InOut" />
+          <Parameter Name="MENSAJE" Type="varchar" Mode="InOut" />
+        </Function>
+        <Function Name="PA_LOGIN" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="EMAIL" Type="varchar" Mode="In" />
+          <Parameter Name="PASSWORD" Type="varchar" Mode="In" />
+          <Parameter Name="ID_USUARIOS" Type="int" Mode="InOut" />
+          <Parameter Name="RETCODE" Type="int" Mode="InOut" />
+          <Parameter Name="MENSAJE" Type="varchar" Mode="InOut" />
+        </Function>
+        <Function Name="PA_MODIFICAR_USUARIO" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ID_USUARIO" Type="int" Mode="In" />
+          <Parameter Name="USUARIO" Type="varchar" Mode="In" />
+          <Parameter Name="PASSWORD" Type="varchar" Mode="In" />
+          <Parameter Name="PERFIL" Type="int" Mode="In" />
+          <Parameter Name="EMAIL" Type="varchar" Mode="In" />
+          <Parameter Name="RETCODE" Type="int" Mode="InOut" />
+          <Parameter Name="MENSAJE" Type="varchar" Mode="InOut" />
+        </Function>
+        <EntityContainer Name="ARCIPRESTE3Model1StoreContainer">
+          <EntitySet Name="USUARIOS" EntityType="Self.USUARIOS" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="V_USUARIOS_PERFILES" EntityType="Self.V_USUARIOS_PERFILES" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [V_USUARIOS_PERFILES].[ID_USUARIOS] AS [ID_USUARIOS], 
+    [V_USUARIOS_PERFILES].[USUARIO] AS [USUARIO], 
+    [V_USUARIOS_PERFILES].[ID_PERFIL] AS [ID_PERFIL], 
+    [V_USUARIOS_PERFILES].[PERFIL] AS [PERFIL], 
+    [V_USUARIOS_PERFILES].[EMAIL] AS [EMAIL]
+    FROM [dbo].[V_USUARIOS_PERFILES] AS [V_USUARIOS_PERFILES]</DefiningQuery>
+          </EntitySet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="ARCIPRESTE3Model1" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="UsuariosEntities3" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="USUARIOS" EntityType="ARCIPRESTE3Model1.USUARIOS" />
+          <EntitySet Name="V_USUARIOS_PERFILES" EntityType="ARCIPRESTE3Model1.V_USUARIOS_PERFILES" />
+          <FunctionImport Name="PA_CREAR_USUARIO">
+            <Parameter Name="USUARIO" Mode="In" Type="String" />
+            <Parameter Name="PASSWORD" Mode="In" Type="String" />
+            <Parameter Name="PERFIL" Mode="In" Type="Int32" />
+            <Parameter Name="EMAIL" Mode="In" Type="String" />
+            <Parameter Name="RETCODE" Mode="InOut" Type="Int32" />
+            <Parameter Name="MENSAJE" Mode="InOut" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="PA_LOGIN">
+            <Parameter Name="EMAIL" Mode="In" Type="String" />
+            <Parameter Name="PASSWORD" Mode="In" Type="String" />
+            <Parameter Name="ID_USUARIOS" Mode="InOut" Type="Int32" />
+            <Parameter Name="RETCODE" Mode="InOut" Type="Int32" />
+            <Parameter Name="MENSAJE" Mode="InOut" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="PA_BORRAR_USUARIO">
+            <Parameter Name="ID_USUARIO" Mode="In" Type="Int32" />
+            <Parameter Name="RETCODE" Mode="InOut" Type="Int32" />
+            <Parameter Name="MENSAJE" Mode="InOut" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="PA_MODIFICAR_USUARIO">
+            <Parameter Name="ID_USUARIO" Mode="In" Type="Int32" />
+            <Parameter Name="USUARIO" Mode="In" Type="String" />
+            <Parameter Name="PASSWORD" Mode="In" Type="String" />
+            <Parameter Name="PERFIL" Mode="In" Type="Int32" />
+            <Parameter Name="EMAIL" Mode="In" Type="String" />
+            <Parameter Name="RETCODE" Mode="InOut" Type="Int32" />
+            <Parameter Name="MENSAJE" Mode="InOut" Type="String" />
+          </FunctionImport>
+        </EntityContainer>
+        <EntityType Name="USUARIOS">
+          <Key>
+            <PropertyRef Name="ID_USUARIOS" />
+          </Key>
+          <Property Name="ID_USUARIOS" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="USUARIO" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" />
+          <Property Name="PASSWORD" Type="Binary" MaxLength="Max" FixedLength="false" />
+          <Property Name="PERFIL" Type="Int32" />
+          <Property Name="EMAIL" Type="String" MaxLength="70" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="V_USUARIOS_PERFILES">
+          <Key>
+            <PropertyRef Name="ID_USUARIOS" />
+          </Key>
+          <Property Name="ID_USUARIOS" Type="Int32" Nullable="false" />
+          <Property Name="USUARIO" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" />
+          <Property Name="ID_PERFIL" Type="Int32" />
+          <Property Name="PERFIL" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" />
+          <Property Name="EMAIL" Type="String" MaxLength="70" FixedLength="false" Unicode="false" />
+        </EntityType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="ARCIPRESTE3Model1StoreContainer" CdmEntityContainer="UsuariosEntities3">
+          <EntitySetMapping Name="USUARIOS">
+            <EntityTypeMapping TypeName="ARCIPRESTE3Model1.USUARIOS">
+              <MappingFragment StoreEntitySet="USUARIOS">
+                <ScalarProperty Name="EMAIL" ColumnName="EMAIL" />
+                <ScalarProperty Name="PERFIL" ColumnName="PERFIL" />
+                <ScalarProperty Name="PASSWORD" ColumnName="PASSWORD" />
+                <ScalarProperty Name="USUARIO" ColumnName="USUARIO" />
+                <ScalarProperty Name="ID_USUARIOS" ColumnName="ID_USUARIOS" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="V_USUARIOS_PERFILES">
+            <EntityTypeMapping TypeName="ARCIPRESTE3Model1.V_USUARIOS_PERFILES">
+              <MappingFragment StoreEntitySet="V_USUARIOS_PERFILES">
+                <ScalarProperty Name="EMAIL" ColumnName="EMAIL" />
+                <ScalarProperty Name="PERFIL" ColumnName="PERFIL" />
+                <ScalarProperty Name="ID_PERFIL" ColumnName="ID_PERFIL" />
+                <ScalarProperty Name="USUARIO" ColumnName="USUARIO" />
+                <ScalarProperty Name="ID_USUARIOS" ColumnName="ID_USUARIOS" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="PA_CREAR_USUARIO" FunctionName="ARCIPRESTE3Model1.Store.PA_CREAR_USUARIO" />
+          <FunctionImportMapping FunctionImportName="PA_LOGIN" FunctionName="ARCIPRESTE3Model1.Store.PA_LOGIN" />
+          <FunctionImportMapping FunctionImportName="PA_BORRAR_USUARIO" FunctionName="ARCIPRESTE3Model1.Store.PA_BORRAR_USUARIO" />
+          <FunctionImportMapping FunctionImportName="PA_MODIFICAR_USUARIO" FunctionName="ARCIPRESTE3Model1.Store.PA_MODIFICAR_USUARIO" />
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Ninguno" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

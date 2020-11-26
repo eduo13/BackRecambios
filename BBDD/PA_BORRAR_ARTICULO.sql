@@ -1,0 +1,49 @@
+USE [ARCIPRESTE3]
+GO
+/****** Object:  StoredProcedure [dbo].[PA_BORRAR_ARTICULO]    Script Date: 09/10/2020 13:39:56 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE PROCEDURE [dbo].[PA_BORRAR_ARTICULO] 
+(
+	@ID_ARTICULO INT,
+
+	@RETCODE INT OUTPUT,
+	@MENSAJE VARCHAR(200) OUTPUT
+)
+AS
+BEGIN
+SET NOCOUNT ON;
+	
+	IF (@ID_ARTICULO = '')
+	BEGIN
+		
+		SET @MENSAJE =  'No se ha introducido ningún ID de articulo'
+		SET @RETCODE = 1
+		RETURN
+	END
+
+	IF NOT EXISTS (SELECT ID_ARTICULO FROM ARTICULOS WHERE ID_ARTICULO = @ID_ARTICULO)
+	BEGIN
+		SET @MENSAJE =  'El ID introducido no existe en la base de datos'
+		SET @RETCODE = 1
+		RETURN
+	END
+
+	ELSE
+
+	BEGIN
+
+		DELETE FROM ARTICULOS WHERE ID_ARTICULO = @ID_ARTICULO
+
+		SET @MENSAJE =  'Articulo eliminado correctamente' 
+		SET @RETCODE = 0
+
+	END
+
+	RETURN
+
+
+END
