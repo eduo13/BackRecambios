@@ -4,15 +4,12 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="106f21cb098146a78edd20e08ddc563f" Name="Diagram1">
-        <EntityTypeShape EntityType="ARCIPRESTE3Model.ARTICULOS" Width="1.5" PointX="0.75" PointY="1.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="ARCIPRESTE3Model.PEDIDOS" Width="1.5" PointX="0.75" PointY="6.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="ARCIPRESTE3Model.PEDIDOS_ARTICULOS" Width="1.5" PointX="3" PointY="2.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="ARCIPRESTE3Model.STOCK" Width="1.5" PointX="3" PointY="5.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="ARCIPRESTE3Model.V_ARTICULOS_STOCK" Width="1.5" PointX="5.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="ARCIPRESTE3Model.V_PEDIDOS_ARTICULOS_STOCK" Width="1.5" PointX="5.75" PointY="4.75" IsExpanded="true" />
+      <Diagram DiagramId="e5e40b86ece94bfea6e1c06be80632cf" Name="Diagram1">
+        <EntityTypeShape EntityType="ARCIPRESTE3Model.ARTICULOS" Width="1.5" PointX="6.125" PointY="1.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ARCIPRESTE3Model.PEDIDOS" Width="1.5" PointX="0.75" PointY="5.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="ARCIPRESTE3Model.PEDIDOS_ARTICULOS" Width="1.5" PointX="3" PointY="1.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ARCIPRESTE3Model.V_PEDIDOS_ARTICULOS_STOCK" Width="1.5" PointX="5.625" PointY="6.25" IsExpanded="true" />
         <AssociationConnector Association="ARCIPRESTE3Model.FK_PEDIDOS_ARTICULOS_ARTICULOS" ManuallyRouted="false" />
-        <AssociationConnector Association="ARCIPRESTE3Model.FK_STOCK_ARTICULOS" ManuallyRouted="false" />
         <AssociationConnector Association="ARCIPRESTE3Model.FK_PEDIDOS_ARTICULOS_PEDIDOS" ManuallyRouted="false" />
       </Diagram>
     </edmx:Diagrams>

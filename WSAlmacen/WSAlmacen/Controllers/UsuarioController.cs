@@ -18,15 +18,15 @@ namespace WSAlmacen.Controllers
         public HttpResponseMessage login(LoginRequest User)
         {
             var usuarioDA = new UsuarioDataAccess();
-            var usuarioLogeado = usuarioDA.login(User);
+            var usuarioLogado = usuarioDA.login(User);
 
-            if(usuarioLogeado.IdPerfil > 0)
+            if(usuarioLogado.IdPerfil > 0)
             {
-                var token = TokenGenerator.GenerateTokenJwt(User.Email);
-                usuarioLogeado.Token = token;
+                var token = TokenGenerator.GenerateTokenJwt(User.Email, usuarioLogado.Perfil);
+                usuarioLogado.Token = token;
             }
 
-            return Request.CreateResponse(HttpStatusCode.OK, usuarioLogeado);
+            return Request.CreateResponse(HttpStatusCode.OK, usuarioLogado);
         }
 
         //CREATE

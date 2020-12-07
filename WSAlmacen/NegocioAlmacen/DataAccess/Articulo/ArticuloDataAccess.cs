@@ -29,11 +29,13 @@ namespace NegocioAlmacen.DataAccess.Articulo
                     string cadenaImagen = newArt.Imagen.Replace("data:image/png;base64,", "").Replace("data:image/jpeg;base64,", "");
                     byte[] imgBinary = Convert.FromBase64String(cadenaImagen);
 
-                    context.PA_AÑADIR_ARTICULO(newArt.Nombre, newArt.Descripcion, newArt.Fabricante, newArt.Peso, newArt.Alto, newArt.Largo, newArt.Ancho, newArt.Precio, imgBinary, RETCODE, MENSAJE);
+                    //CREAMOS ARTICULO CON STOCK 0 Y HABILITADO = 1(HABILITADO)
+                    context.PA_AÑADIR_ARTICULO(newArt.Nombre, newArt.Descripcion, newArt.Fabricante, newArt.Peso, newArt.Alto, newArt.Largo, newArt.Ancho, newArt.Precio, imgBinary, 1, 0, RETCODE, MENSAJE);
 
                     //AÑADIMOS EL STOCK INICIAL
                     var consulta = context.ARTICULOS.Where(art => art.NOMBRE == newArt.Nombre).FirstOrDefault();
-                    context.PA_AÑADIR_STOCK(consulta.ID_ARTICULO, newArt.Stock, RETCODE, MENSAJE);
+                    
+                    //context.PA_AÑADIR_STOCK(consulta.ID_ARTICULO, newArt.Stock, RETCODE, MENSAJE);
 
                     if ((int)RETCODE.Value < 0)
                      {
@@ -47,7 +49,9 @@ namespace NegocioAlmacen.DataAccess.Articulo
 
                      return new CreateArticleResponse()
                      {
-                         Mensaje = MENSAJE.Value.ToString()
+                         Mensaje = MENSAJE.Value.ToString(),
+                         Id_articulo = consulta.ID_ARTICULO,
+                         Retcode = (int)RETCODE.Value
                      };
                  }
              }
@@ -71,16 +75,21 @@ namespace NegocioAlmacen.DataAccess.Articulo
                     ObjectParameter RETCODE = new ObjectParameter("RETCODE", typeof(int));
                     ObjectParameter MENSAJE = new ObjectParameter("MENSAJE", typeof(string));
 
-                    var consulta = context.V_ARTICULOS_STOCK.Where(art => art.ID_ARTICULO == delArt.ID_Articulo).FirstOrDefault();
+                    var consulta = context.ARTICULOS.Where(art => art.ID_ARTICULO == delArt.ID_Articulo).FirstOrDefault();
 
                     //COMPROBAMOS SI SE PUEDE ELIMINAR EL ARTICULO SEGUN SI TIENE STOCK O NO
-                    if (consulta.CANTIDAD == 0)
+                    if (consulta.STOCK == 0)
                     {
                         context.PA_BORRAR_ARTICULO(delArt.ID_Articulo, RETCODE, MENSAJE);
                     }
                     else
                     {
-                        throw new Exception("No se puede eliminar el articulo porque aun posee stock en el almacén");
+                        return new DeleteArticleResponse()
+                        {
+                            Retcode = 1,
+                            Mensaje = "No se puede eliminar el articulo porque aun posee stock en el almacén"
+                        };
+                        //throw new Exception("No se puede eliminar el articulo porque aun posee stock en el almacén");
                     }
                     
 
@@ -96,6 +105,8 @@ namespace NegocioAlmacen.DataAccess.Articulo
 
                     return new DeleteArticleResponse()
                     {
+                        Id_articulo = (int)delArt.ID_Articulo,
+                        Retcode = (int)RETCODE.Value,
                         Mensaje = MENSAJE.Value.ToString()
                     };
                 }
@@ -104,6 +115,7 @@ namespace NegocioAlmacen.DataAccess.Articulo
             {
                 return new DeleteArticleResponse()
                 {
+                    Retcode = 1,
                     Mensaje = ex.Message
                 };
             }
@@ -124,28 +136,28 @@ namespace NegocioAlmacen.DataAccess.Articulo
                     string cadenaImagen = upArt.Imagen.Replace("data:image/png;base64,", "").Replace("data:image/jpeg;base64,", "");
                     byte[] imgBinary = Convert.FromBase64String(cadenaImagen);
 
-                    context.PA_MODIFICAR_ARTICULO(upArt.ID_Articulo, upArt.Nombre, upArt.Descripcion, upArt.Fabricante, upArt.Peso, upArt.Alto, upArt.Largo, upArt.Ancho, upArt.Precio, imgBinary, RETCODE, MENSAJE);
+                    context.PA_MODIFICAR_ARTICULO(upArt.ID_Articulo, upArt.Nombre, upArt.Descripcion, upArt.Fabricante, upArt.Peso, upArt.Alto, upArt.Largo, upArt.Ancho, upArt.Precio, imgBinary, upArt.Habilitado, upArt.Stock, RETCODE, MENSAJE);
 
-                    //COMPROBAMOS SI SE HA DE AÑADIR O QUITRA STOCK
-                    if (upArt.Stock < 0)
-                    {
-                        //QUITAMOS EL NEGATIVO AL STOCK PARA REALIZAR LA OPERACIÓN
-                        upArt.Stock = upArt.Stock * -1;
-                        context.PA_QUITAR_STOCK(upArt.ID_Articulo, upArt.Stock, RETCODE, MENSAJE);
-                    }
-                    else
+                    //COMPROBAMOS SI SE HA DE AÑADIR O QUITAR STOCK
+                    //if (upArt.Stock < 0)
+                    //{
+                    //    //QUITAMOS EL NEGATIVO AL STOCK PARA REALIZAR LA OPERACIÓN
+                    //    upArt.Stock = upArt.Stock * -1;
+                    //    context.PA_QUITAR_STOCK(upArt.ID_Articulo, upArt.Stock, RETCODE, MENSAJE);
+                    //}
+                    //else
                     //AÑADIMOS STOCK Y COMPROBAMOS SI HAY ALGÚN PEDIDO EN ESPERA QUE REQUIERA EL ARTICULO AÑADIDO
-                    {
+                    //{
                         //RECOGEMOS TODOS LOS PEDIDOS QUE ESTÉN EN ESPERA Y SOLO LOS ARTICULOS QUE NO HAYA SUFICIENTE CANTIDAD
-                        var pedidosPendientes = context.V_PEDIDOS_ARTICULOS_STOCK.ToList();
+                        //var pedidosPendientes = context.V_PEDIDOS_ARTICULOS_STOCK.ToList();
 
-                        foreach(var p in pedidosPendientes)
-                        {
+                    //    foreach(var p in pedidosPendientes)
+                    //    {
 
-                        }
+                    //    }
 
-                        context.PA_AÑADIR_STOCK(upArt.ID_Articulo, upArt.Stock, RETCODE, MENSAJE);
-                    }
+                    //    context.PA_AÑADIR_STOCK(upArt.ID_Articulo, upArt.Stock, RETCODE, MENSAJE);
+                    //}
 
                     if ((int)RETCODE.Value < 0)
                     {
@@ -159,7 +171,8 @@ namespace NegocioAlmacen.DataAccess.Articulo
 
                     return new UpdateArticleResponse()
                     {
-                        Mensaje = MENSAJE.Value.ToString()
+                        Mensaje = MENSAJE.Value.ToString(),
+                        Retcode = (int)RETCODE.Value
                     };
                 }
             }
@@ -167,7 +180,8 @@ namespace NegocioAlmacen.DataAccess.Articulo
             {
                 return new UpdateArticleResponse()
                 {
-                    Mensaje = ex.Message
+                    Mensaje = ex.Message,
+                    Retcode = -1
                 };
             }
 
@@ -181,20 +195,21 @@ namespace NegocioAlmacen.DataAccess.Articulo
                 using (var context = new ArticulosEntities())
                 {
 
-                    List<Article> listArticles = (from V_ARTICULOS_STOCK in context.V_ARTICULOS_STOCK
+                    List<Article> listArticles = (from ARTICULOS in context.ARTICULOS
+                                                  where ARTICULOS.HABILITADO == 1
                                                   select new Article
                                                   {
-                                                      ID_Articulo = V_ARTICULOS_STOCK.ID_ARTICULO,
-                                                      Nombre = V_ARTICULOS_STOCK.NOMBRE,
-                                                      Stock = V_ARTICULOS_STOCK.CANTIDAD,
-                                                      Descripcion = V_ARTICULOS_STOCK.DESCRIPCION,
-                                                      Fabricante = V_ARTICULOS_STOCK.FABRICANTE,
-                                                      Peso = V_ARTICULOS_STOCK.PESO,
-                                                      Alto = V_ARTICULOS_STOCK.ALTO,
-                                                      Largo = V_ARTICULOS_STOCK.LARGO,
-                                                      Ancho = V_ARTICULOS_STOCK.ANCHO,
-                                                      Precio = V_ARTICULOS_STOCK.PRECIO,
-                                                      ImagenTemp = V_ARTICULOS_STOCK.IMAGEN
+                                                      ID_Articulo = ARTICULOS.ID_ARTICULO,
+                                                      Nombre = ARTICULOS.NOMBRE,
+                                                      Stock = ARTICULOS.STOCK,
+                                                      Descripcion = ARTICULOS.DESCRIPCION,
+                                                      Fabricante = ARTICULOS.FABRICANTE,
+                                                      Peso = ARTICULOS.PESO,
+                                                      Alto = ARTICULOS.ALTO,
+                                                      Largo = ARTICULOS.LARGO,
+                                                      Ancho = ARTICULOS.ANCHO,
+                                                      Precio = ARTICULOS.PRECIO,
+                                                      ImagenTemp = ARTICULOS.IMAGEN
 
                                                   }).ToList<Article>();
 
@@ -242,13 +257,13 @@ namespace NegocioAlmacen.DataAccess.Articulo
                         throw new Exception(MENSAJE.Value.ToString());
                     }
 
-                    var consulta = context.V_ARTICULOS_STOCK.Where(id => id.ID_ARTICULO == newStock.ID_Articulo).FirstOrDefault();
+                    var consulta = context.ARTICULOS.Where(id => id.ID_ARTICULO == newStock.ID_Articulo).FirstOrDefault();
 
                     return new UpdateArticleResponse()
                     {
                         Retcode = (int)RETCODE.Value,
                         Mensaje = MENSAJE.Value.ToString(),
-                        Stock = (int)consulta.CANTIDAD
+                        Stock = (int)consulta.STOCK
                     };
                 }
             }
@@ -270,11 +285,11 @@ namespace NegocioAlmacen.DataAccess.Articulo
                 {
 
 
-                    var consulta = context.V_ARTICULOS_STOCK.Where(id => id.ID_ARTICULO == newStock.ID_Articulo).FirstOrDefault();
+                    var consulta = context.ARTICULOS.Where(id => id.ID_ARTICULO == newStock.ID_Articulo).FirstOrDefault();
 
                     return new UpdateArticleResponse()
                     {
-                        Stock = (int)consulta.CANTIDAD
+                        Stock = (int)consulta.STOCK
                     };
                 }
             }
@@ -322,8 +337,8 @@ namespace NegocioAlmacen.DataAccess.Articulo
                                                          ID_Pedido = V_PEDIDOS_ARTICULOS_STOCK.ID_PEDIDO,
                                                          Estado = V_PEDIDOS_ARTICULOS_STOCK.ESTADO,
                                                          ID_Articulo = (int)V_PEDIDOS_ARTICULOS_STOCK.ID_ARTICULO,
-                                                         CantidadPedida = (int)V_PEDIDOS_ARTICULOS_STOCK.CANTIDADPEDIDA,
-                                                         Cantidad = (int)V_PEDIDOS_ARTICULOS_STOCK.CANTIDAD
+                                                         CantidadPedida = (int)V_PEDIDOS_ARTICULOS_STOCK.CANTIDAD_PEDIDA,
+                                                         Stock = (int)V_PEDIDOS_ARTICULOS_STOCK.STOCK
 
 
                                                      }).ToList<ArticuloPedidoStock>();
@@ -379,13 +394,13 @@ namespace NegocioAlmacen.DataAccess.Articulo
                         }
                     }
 
-                    var consulta = context.V_ARTICULOS_STOCK.Where(id => id.ID_ARTICULO == newStock.ID_Articulo).FirstOrDefault();
+                    var consulta = context.ARTICULOS.Where(id => id.ID_ARTICULO == newStock.ID_Articulo).FirstOrDefault();
 
                     return new UpdateArticleResponse()
                     {
                         Retcode = (int)RETCODE.Value,
                         Mensaje = MENSAJE.Value.ToString(),
-                        Stock = (int)consulta.CANTIDAD
+                        Stock = (int)consulta.STOCK
                     };
                 }
             }
@@ -415,7 +430,7 @@ namespace NegocioAlmacen.DataAccess.Articulo
         //METODO PARA CHEQUEAR EL STOCK DEL ARTICULO EN EL PEDIDO
         private bool checkStockArticulo(ArticuloPedidoStock pedido, List<ArticuloStock> articles)
         {
-            var completo = (pedido.Cantidad >= pedido.CantidadPedida) ? true : false;
+            var completo = (pedido.Stock >= pedido.CantidadPedida) ? true : false;
 
             if (completo)
             {
@@ -537,7 +552,7 @@ namespace NegocioAlmacen.DataAccess.Articulo
                 using (var context = new ArticulosEntities())
                 {
                     var resultado = "";
-                    var consulta = context.PEDIDOS_ARTICULOS.Where(id => id.ID_ARTICULO == estado.ID_Articulo).FirstOrDefault();
+                    var consulta = context.V_PEDIDOS_ARTICULOS_STOCK.Where(id => id.ID_ARTICULO == estado.ID_Articulo).FirstOrDefault();
 
                     if(consulta.ESTADO != estado.Estado)
                     {

@@ -19,5 +19,7 @@ namespace NegocioAlmacen.DataAccess.Articulo.DTO
         public decimal Ancho { get; set; }
         public decimal Precio { get; set; }
         public string Imagen { get; set; }
+        public int Habilitado { get; set; }
+
     }
 }

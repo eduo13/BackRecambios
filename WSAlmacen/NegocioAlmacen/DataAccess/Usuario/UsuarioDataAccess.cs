@@ -36,13 +36,14 @@ namespace NegocioAlmacen.DataAccess.Usuario
                         throw new Exception(MENSAJE.Value.ToString());
                     }
                                                            
-                    var consulta = context.USUARIOS.Where(user => user.ID_USUARIOS == (int)ID_USUARIOS.Value).FirstOrDefault();
+                    var consulta = context.V_USUARIOS_PERFILES.Where(user => user.ID_USUARIOS == (int)ID_USUARIOS.Value).FirstOrDefault();
 
                     return new LoginResponse()
                     {
                         Usuario = consulta.USUARIO,
                         IdUsuarios = consulta.ID_USUARIOS,
-                        IdPerfil = consulta.PERFIL,
+                        IdPerfil = consulta.ID_PERFIL,
+                        Perfil = consulta.PERFIL,
                         Email = consulta.EMAIL,
                         Mensaje = MENSAJE.Value.ToString()
                     };
@@ -85,7 +86,9 @@ namespace NegocioAlmacen.DataAccess.Usuario
                     return new CreateUserResponse()
                     {
                         Usuario = consulta.USUARIO,
-                        Mensaje = MENSAJE.Value.ToString()
+                        Id_usuario = consulta.ID_USUARIOS,
+                        Mensaje = MENSAJE.Value.ToString(),
+                        Retcode = (int)RETCODE.Value
                     };
                 }
             }
@@ -93,7 +96,8 @@ namespace NegocioAlmacen.DataAccess.Usuario
             {
                 return new CreateUserResponse()
                 {
-                    Mensaje = ex.Message
+                    Mensaje = ex.Message,
+                    Retcode = -1
                 };
             }
             
@@ -126,7 +130,8 @@ namespace NegocioAlmacen.DataAccess.Usuario
                     return new DeleteUserResponse()
                     {
                      //   Usuario = consulta.USUARIO,
-                        Mensaje = MENSAJE.Value.ToString()
+                        Mensaje = MENSAJE.Value.ToString(),
+                        Retcode = (int)RETCODE.Value
                     };
                 }
             }
@@ -134,7 +139,8 @@ namespace NegocioAlmacen.DataAccess.Usuario
             {
                 return new DeleteUserResponse()
                 {
-                    Mensaje = ex.Message
+                    Mensaje = ex.Message,
+                    Retcode = -1
                 };
             }
 
@@ -167,7 +173,8 @@ namespace NegocioAlmacen.DataAccess.Usuario
                     return new UpdateUserResponse()
                     {
                         Usuario = consulta.USUARIO,
-                        Mensaje = MENSAJE.Value.ToString()
+                        Mensaje = MENSAJE.Value.ToString(),
+                        Retcode = (int)RETCODE.Value
                     };
                 }
             }
@@ -175,7 +182,8 @@ namespace NegocioAlmacen.DataAccess.Usuario
             {
                 return new UpdateUserResponse()
                 {
-                    Mensaje = ex.Message
+                    Mensaje = ex.Message,
+                    Retcode = -1
                 };
             }
 
@@ -196,6 +204,7 @@ namespace NegocioAlmacen.DataAccess.Usuario
                                                    Email = V_USUARIOS_PERFILES.EMAIL
 
                                                }).ToList<User>();
+                    
                     return listUsuarios;
                 }
             }catch(Exception ex)

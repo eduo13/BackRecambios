@@ -17,7 +17,6 @@ namespace DatosAlmacen.Articulos
         public int ID_PEDIDO { get; set; }
         public int ID_ARTICULO { get; set; }
         public int CANTIDAD { get; set; }
-        public string ESTADO { get; set; }
     
         public virtual ARTICULOS ARTICULOS { get; set; }
         public virtual PEDIDOS PEDIDOS { get; set; }

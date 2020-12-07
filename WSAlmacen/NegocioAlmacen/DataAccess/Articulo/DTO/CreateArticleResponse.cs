@@ -9,6 +9,8 @@ namespace NegocioAlmacen.DataAccess.Articulo.DTO
     public class CreateArticleResponse
     {
         public string Mensaje { get; set; }
+        public int Retcode { get; set; }
+        public int Id_articulo { get; set; }
 
     }
 }

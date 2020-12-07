@@ -53,38 +53,32 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Articulos\Articulos.Context.cs">
+    <Compile Include="Articulos\articulos.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>Articulos.Context.tt</DependentUpon>
+      <DependentUpon>articulos.Context.tt</DependentUpon>
     </Compile>
     <Compile Include="Articulos\ARTICULOS.cs">
-      <DependentUpon>Articulos.tt</DependentUpon>
+      <DependentUpon>articulos.tt</DependentUpon>
     </Compile>
-    <Compile Include="Articulos\Articulos.Designer.cs">
+    <Compile Include="Articulos\articulos.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>Articulos.edmx</DependentUpon>
+      <DependentUpon>articulos.edmx</DependentUpon>
     </Compile>
-    <Compile Include="Articulos\Articulos1.cs">
+    <Compile Include="Articulos\articulos1.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>Articulos.tt</DependentUpon>
+      <DependentUpon>articulos.tt</DependentUpon>
     </Compile>
     <Compile Include="Articulos\PEDIDOS.cs">
-      <DependentUpon>Articulos.tt</DependentUpon>
+      <DependentUpon>articulos.tt</DependentUpon>
     </Compile>
     <Compile Include="Articulos\PEDIDOS_ARTICULOS.cs">
-      <DependentUpon>Articulos.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Articulos\STOCK.cs">
-      <DependentUpon>Articulos.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Articulos\V_ARTICULOS_STOCK.cs">
-      <DependentUpon>Articulos.tt</DependentUpon>
+      <DependentUpon>articulos.tt</DependentUpon>
     </Compile>
     <Compile Include="Articulos\V_PEDIDOS_ARTICULOS_STOCK.cs">
-      <DependentUpon>Articulos.tt</DependentUpon>
+      <DependentUpon>articulos.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Usuario\Usuarios.Context.cs">
@@ -111,12 +105,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <EntityDeploy Include="Articulos\Articulos.edmx">
+    <EntityDeploy Include="Articulos\articulos.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>Articulos.Designer.cs</LastGenOutput>
+      <LastGenOutput>articulos.Designer.cs</LastGenOutput>
     </EntityDeploy>
-    <None Include="Articulos\Articulos.edmx.diagram">
-      <DependentUpon>Articulos.edmx</DependentUpon>
+    <None Include="Articulos\articulos.edmx.diagram">
+      <DependentUpon>articulos.edmx</DependentUpon>
     </None>
     <None Include="packages.config" />
     <EntityDeploy Include="Usuario\Usuarios.edmx">
@@ -132,15 +126,15 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <Content Include="Articulos\Articulos.Context.tt">
+    <Content Include="Articulos\articulos.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>Articulos.edmx</DependentUpon>
-      <LastGenOutput>Articulos.Context.cs</LastGenOutput>
+      <DependentUpon>articulos.edmx</DependentUpon>
+      <LastGenOutput>articulos.Context.cs</LastGenOutput>
     </Content>
-    <Content Include="Articulos\Articulos.tt">
+    <Content Include="Articulos\articulos.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>Articulos.edmx</DependentUpon>
-      <LastGenOutput>Articulos1.cs</LastGenOutput>
+      <DependentUpon>articulos.edmx</DependentUpon>
+      <LastGenOutput>articulos1.cs</LastGenOutput>
     </Content>
     <Content Include="Usuario\Usuarios.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>

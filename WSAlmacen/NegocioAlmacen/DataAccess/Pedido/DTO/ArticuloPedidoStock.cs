@@ -12,6 +12,6 @@ namespace NegocioAlmacen.DataAccess.Pedido.DTO
         public string Estado { get; set; }
         public int ID_Articulo { get; set; }
         public int CantidadPedida { get; set; }
-        public int Cantidad { get; set; }
+        public int Stock { get; set; }
     }
 }

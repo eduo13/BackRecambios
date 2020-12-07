@@ -30,11 +30,9 @@ namespace DatosAlmacen.Articulos
         public virtual DbSet<ARTICULOS> ARTICULOS { get; set; }
         public virtual DbSet<PEDIDOS> PEDIDOS { get; set; }
         public virtual DbSet<PEDIDOS_ARTICULOS> PEDIDOS_ARTICULOS { get; set; }
-        public virtual DbSet<STOCK> STOCK { get; set; }
-        public virtual DbSet<V_ARTICULOS_STOCK> V_ARTICULOS_STOCK { get; set; }
         public virtual DbSet<V_PEDIDOS_ARTICULOS_STOCK> V_PEDIDOS_ARTICULOS_STOCK { get; set; }
     
-        public virtual int PA_AÑADIR_ARTICULO(string nOMBRE, string dESCRIPCION, string fABRICANTE, Nullable<decimal> pESO, Nullable<decimal> aLTO, Nullable<decimal> lARGO, Nullable<decimal> aNCHO, Nullable<decimal> pRECIO, byte[] iMAGEN, ObjectParameter rETCODE, ObjectParameter mENSAJE)
+        public virtual int PA_AÑADIR_ARTICULO(string nOMBRE, string dESCRIPCION, string fABRICANTE, Nullable<decimal> pESO, Nullable<decimal> aLTO, Nullable<decimal> lARGO, Nullable<decimal> aNCHO, Nullable<decimal> pRECIO, byte[] iMAGEN, Nullable<int> hABILITADO, Nullable<int> sTOCK, ObjectParameter rETCODE, ObjectParameter mENSAJE)
         {
             var nOMBREParameter = nOMBRE != null ?
                 new ObjectParameter("NOMBRE", nOMBRE) :
@@ -72,7 +70,15 @@ namespace DatosAlmacen.Articulos
                 new ObjectParameter("IMAGEN", iMAGEN) :
                 new ObjectParameter("IMAGEN", typeof(byte[]));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("PA_AÑADIR_ARTICULO", nOMBREParameter, dESCRIPCIONParameter, fABRICANTEParameter, pESOParameter, aLTOParameter, lARGOParameter, aNCHOParameter, pRECIOParameter, iMAGENParameter, rETCODE, mENSAJE);
+            var hABILITADOParameter = hABILITADO.HasValue ?
+                new ObjectParameter("HABILITADO", hABILITADO) :
+                new ObjectParameter("HABILITADO", typeof(int));
+    
+            var sTOCKParameter = sTOCK.HasValue ?
+                new ObjectParameter("STOCK", sTOCK) :
+                new ObjectParameter("STOCK", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("PA_AÑADIR_ARTICULO", nOMBREParameter, dESCRIPCIONParameter, fABRICANTEParameter, pESOParameter, aLTOParameter, lARGOParameter, aNCHOParameter, pRECIOParameter, iMAGENParameter, hABILITADOParameter, sTOCKParameter, rETCODE, mENSAJE);
         }
     
         public virtual int PA_AÑADIR_PEDIDO(string cALLE, string pROVINCIA, string pOBLACION, Nullable<int> cODIGO_POSTAL, string nUMERO, string pERSONA_CONTACTO, string tELEFONO, string eSTADO, ObjectParameter rETCODE, ObjectParameter mENSAJE, ObjectParameter iD_PEDIDOS)
@@ -112,7 +118,7 @@ namespace DatosAlmacen.Articulos
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("PA_AÑADIR_PEDIDO", cALLEParameter, pROVINCIAParameter, pOBLACIONParameter, cODIGO_POSTALParameter, nUMEROParameter, pERSONA_CONTACTOParameter, tELEFONOParameter, eSTADOParameter, rETCODE, mENSAJE, iD_PEDIDOS);
         }
     
-        public virtual int PA_AÑADIR_PEDIDOS_ARTICULOS(Nullable<int> iD_PEDIDO, Nullable<int> iD_ARTICULO, Nullable<int> cANTIDAD, string eSTADO, ObjectParameter rETCODE, ObjectParameter mENSAJE)
+        public virtual int PA_AÑADIR_PEDIDOS_ARTICULOS(Nullable<int> iD_PEDIDO, Nullable<int> iD_ARTICULO, Nullable<int> cANTIDAD, ObjectParameter rETCODE, ObjectParameter mENSAJE)
         {
             var iD_PEDIDOParameter = iD_PEDIDO.HasValue ?
                 new ObjectParameter("ID_PEDIDO", iD_PEDIDO) :
@@ -126,11 +132,7 @@ namespace DatosAlmacen.Articulos
                 new ObjectParameter("CANTIDAD", cANTIDAD) :
                 new ObjectParameter("CANTIDAD", typeof(int));
     
-            var eSTADOParameter = eSTADO != null ?
-                new ObjectParameter("ESTADO", eSTADO) :
-                new ObjectParameter("ESTADO", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("PA_AÑADIR_PEDIDOS_ARTICULOS", iD_PEDIDOParameter, iD_ARTICULOParameter, cANTIDADParameter, eSTADOParameter, rETCODE, mENSAJE);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("PA_AÑADIR_PEDIDOS_ARTICULOS", iD_PEDIDOParameter, iD_ARTICULOParameter, cANTIDADParameter, rETCODE, mENSAJE);
         }
     
         public virtual int PA_AÑADIR_STOCK(Nullable<int> iD_ARTICULO, Nullable<int> cANTIDAD, ObjectParameter rETCODE, ObjectParameter mENSAJE)
@@ -164,7 +166,7 @@ namespace DatosAlmacen.Articulos
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("PA_CANCELAR_PEDIDO", iD_PEDIDOParameter, rETCODE, mENSAJE);
         }
     
-        public virtual int PA_MODIFICAR_ARTICULO(Nullable<int> iD_ARTICULO, string nOMBRE, string dESCRIPCION, string fABRICANTE, Nullable<decimal> pESO, Nullable<decimal> aLTO, Nullable<decimal> lARGO, Nullable<decimal> aNCHO, Nullable<decimal> pRECIO, byte[] iMAGEN, ObjectParameter rETCODE, ObjectParameter mENSAJE)
+        public virtual int PA_MODIFICAR_ARTICULO(Nullable<int> iD_ARTICULO, string nOMBRE, string dESCRIPCION, string fABRICANTE, Nullable<decimal> pESO, Nullable<decimal> aLTO, Nullable<decimal> lARGO, Nullable<decimal> aNCHO, Nullable<decimal> pRECIO, byte[] iMAGEN, Nullable<int> hABILITADO, Nullable<int> sTOCK, ObjectParameter rETCODE, ObjectParameter mENSAJE)
         {
             var iD_ARTICULOParameter = iD_ARTICULO.HasValue ?
                 new ObjectParameter("ID_ARTICULO", iD_ARTICULO) :
@@ -206,7 +208,15 @@ namespace DatosAlmacen.Articulos
                 new ObjectParameter("IMAGEN", iMAGEN) :
                 new ObjectParameter("IMAGEN", typeof(byte[]));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("PA_MODIFICAR_ARTICULO", iD_ARTICULOParameter, nOMBREParameter, dESCRIPCIONParameter, fABRICANTEParameter, pESOParameter, aLTOParameter, lARGOParameter, aNCHOParameter, pRECIOParameter, iMAGENParameter, rETCODE, mENSAJE);
+            var hABILITADOParameter = hABILITADO.HasValue ?
+                new ObjectParameter("HABILITADO", hABILITADO) :
+                new ObjectParameter("HABILITADO", typeof(int));
+    
+            var sTOCKParameter = sTOCK.HasValue ?
+                new ObjectParameter("STOCK", sTOCK) :
+                new ObjectParameter("STOCK", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("PA_MODIFICAR_ARTICULO", iD_ARTICULOParameter, nOMBREParameter, dESCRIPCIONParameter, fABRICANTEParameter, pESOParameter, aLTOParameter, lARGOParameter, aNCHOParameter, pRECIOParameter, iMAGENParameter, hABILITADOParameter, sTOCKParameter, rETCODE, mENSAJE);
         }
     
         public virtual int PA_QUITAR_STOCK(Nullable<int> iD_ARTICULO, Nullable<int> cANTIDAD, ObjectParameter rETCODE, ObjectParameter mENSAJE)

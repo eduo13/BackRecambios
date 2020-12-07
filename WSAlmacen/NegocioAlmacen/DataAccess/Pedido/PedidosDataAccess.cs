@@ -29,9 +29,9 @@ namespace NegocioAlmacen.DataAccess.Pedido
 
                     foreach (ArticuloPedido art in newP.Articulos)
                     {
-                        var consulta = context.V_ARTICULOS_STOCK.Where(id => id.ID_ARTICULO == art.ID_Articulo).FirstOrDefault();
+                        var consulta = context.ARTICULOS.Where(id => id.ID_ARTICULO == art.ID_Articulo).FirstOrDefault();
 
-                        if (consulta.CANTIDAD < art.Cantidad)
+                        if (consulta.STOCK < art.Cantidad)
                         {
                             Estado = "PENDIENTE";
                         }
@@ -44,7 +44,7 @@ namespace NegocioAlmacen.DataAccess.Pedido
                     //AÑADIMOS LOS ARTICULOS Y LA CANTIDAD
                     foreach (ArticuloPedido art in newP.Articulos)
                     {
-                        context.PA_AÑADIR_PEDIDOS_ARTICULOS((int)ID_PEDIDOS.Value, art.ID_Articulo, art.Cantidad, "",  RETCODE, MENSAJE);
+                        context.PA_AÑADIR_PEDIDOS_ARTICULOS((int)ID_PEDIDOS.Value, art.ID_Articulo, art.Cantidad,  RETCODE, MENSAJE);
                     }
 
                     //COMPROBAMOS SI EL PEDIDO SE PUEDE ENVIAR DIRECTAMENTE
@@ -69,7 +69,9 @@ namespace NegocioAlmacen.DataAccess.Pedido
                     return new CreatePedidoResponse()
                     {
                         Mensaje = MENSAJE.Value.ToString(),
-                        ID_Pedido = (int)ID_PEDIDOS.Value
+                        Retcode = (int)RETCODE.Value,
+                        ID_Pedido = (int)ID_PEDIDOS.Value,
+                        Estado = Estado
                     };
                 }
             }
@@ -110,6 +112,7 @@ namespace NegocioAlmacen.DataAccess.Pedido
                     return new DeletePedidoResponse()
                     {
                         Mensaje = MENSAJE.Value.ToString(),
+                        Retcode = (int)RETCODE.Value,
                         ID_Pedido = delP.ID_Pedido
                     };
                 }

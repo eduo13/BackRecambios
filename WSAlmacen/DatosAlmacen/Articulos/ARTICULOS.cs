@@ -30,9 +30,10 @@ namespace DatosAlmacen.Articulos
         public Nullable<decimal> ANCHO { get; set; }
         public decimal PRECIO { get; set; }
         public byte[] IMAGEN { get; set; }
+        public Nullable<int> HABILITADO { get; set; }
+        public Nullable<int> STOCK { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PEDIDOS_ARTICULOS> PEDIDOS_ARTICULOS { get; set; }
-        public virtual STOCK STOCK { get; set; }
     }
 }

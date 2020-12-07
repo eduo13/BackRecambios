@@ -10,5 +10,6 @@ namespace NegocioAlmacen.DataAccess.Usuario.DTO
     {
         public string Usuario { get; set; }
         public string Mensaje { get; set; }
+        public int Retcode { get; set; }
     }
 }

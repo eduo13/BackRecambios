@@ -9,6 +9,8 @@ namespace NegocioAlmacen.DataAccess.Pedido.DTO
     public class CreatePedidoResponse
     {
         public string Mensaje { get; set; }
+        public int Retcode { get; set; }
+        public string Estado { get; set; }
         public int ID_Pedido { get; set; }
     }
 }

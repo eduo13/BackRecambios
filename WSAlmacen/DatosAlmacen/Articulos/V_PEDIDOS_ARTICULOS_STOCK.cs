@@ -17,7 +17,8 @@ namespace DatosAlmacen.Articulos
         public int ID_PEDIDO { get; set; }
         public string ESTADO { get; set; }
         public int ID_ARTICULO { get; set; }
-        public int CANTIDADPEDIDA { get; set; }
-        public Nullable<int> CANTIDAD { get; set; }
+        public Nullable<int> HABILITADO { get; set; }
+        public Nullable<int> STOCK { get; set; }
+        public int CANTIDAD_PEDIDA { get; set; }
     }
 }

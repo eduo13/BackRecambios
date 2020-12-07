@@ -11,7 +11,7 @@ namespace WSAlmacen.Controllers
         /// JWT Token generator class using "secret-key"
         /// more info: https://self-issued.info/docs/draft-ietf-oauth-json-web-token.html
         /// </summary>
-        public static string GenerateTokenJwt(string email)
+        public static string GenerateTokenJwt(string email, string perfil)
         {
             // appsetting for Token JWT
             var secretKey = ConfigurationManager.AppSettings["JWT_SECRET_KEY"];
@@ -23,7 +23,10 @@ namespace WSAlmacen.Controllers
             var signingCredentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256Signature);
 
             // create a claimsIdentity
-            ClaimsIdentity claimsIdentity = new ClaimsIdentity(new[] { new Claim(ClaimTypes.Name, email) });
+            ClaimsIdentity claimsIdentity = new ClaimsIdentity(
+                new[] { 
+                    new Claim(ClaimTypes.Email, email), new Claim(ClaimTypes.Role, perfil)
+                });
 
             // create token to the user
             var tokenHandler = new System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler();

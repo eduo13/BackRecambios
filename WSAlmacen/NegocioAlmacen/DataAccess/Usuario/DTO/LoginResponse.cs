@@ -11,6 +11,7 @@ namespace NegocioAlmacen.DataAccess.Usuario.DTO
         public string Usuario { get; set; }
         public int IdUsuarios { get; set; }
         public int? IdPerfil { get; set; }
+        public string Perfil { get; set; }
         public string Email { get; set; }
         public string Mensaje { get; set; }
         public string Token { get; set; }

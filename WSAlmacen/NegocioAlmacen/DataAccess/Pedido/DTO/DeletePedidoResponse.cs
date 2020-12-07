@@ -10,5 +10,6 @@ namespace NegocioAlmacen.DataAccess.Pedido.DTO
     {
         public string Mensaje { get; set; }
         public int ID_Pedido { get; set; }
+        public int Retcode { get; set; }
     }
 }

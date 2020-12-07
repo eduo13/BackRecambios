@@ -1,4 +1,4 @@
-﻿// La generación de código T4 está habilitada para el modelo 'C:\Users\eduar\Source\Repos\proyecto-practicas-back-victor\WSAlmacen\DatosAlmacen\Articulos\Articulos.edmx'. 
+﻿// La generación de código T4 está habilitada para el modelo 'C:\Users\eduar\source\repos\proyecto-practicas-back-victor\WSAlmacen\DatosAlmacen\Articulos\articulos.edmx'. 
 // Para habilitar la generación de código heredada, cambie el valor de la propiedad del diseñador 'Estrategia de generación de código'
 // por 'ObjectContext heredado'. Esta propiedad está disponible en la ventana Propiedades cuando se abre
 // el modelo en el diseñador.
